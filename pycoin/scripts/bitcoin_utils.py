@@ -71,6 +71,7 @@ def main():
     parser.add_argument('-w', "--wif", help='show as Bitcoin WIF', action='store_true')
     parser.add_argument('-n', "--uncompressed", help='show in uncompressed form', action='store_true')
     parser.add_argument('-j', "--json", help='output in JSON format', action='store_true')
+    parser.add_argument('-t', help='interpret fields as test values', action='store_true')
     parser.add_argument('item', help='a WIF, secret exponent, X/Y public pair, SEC (as hex), hash160 (as hex), Bitcoin address', nargs="+")
     args = parser.parse_args()
 
@@ -86,13 +87,13 @@ def main():
                 public_pair = ecdsa.public_pair_for_secret_exponent(secp256k1.generator_secp256k1, secret_exponent)
                 print('    "secret_exponent" : "%d",' % secret_exponent)
                 print('    "secret_exponent_hex" : "%x",' % secret_exponent)
-                print('    "wif" : "%s",' % encoding.secret_exponent_to_wif(secret_exponent, compressed=True))
-                print('    "wif_uncompressed" : "%s",' % encoding.secret_exponent_to_wif(secret_exponent, compressed=False))
+                print('    "wif" : "%s",' % encoding.secret_exponent_to_wif(secret_exponent, compressed=True, is_test=args.t))
+                print('    "wif_uncompressed" : "%s",' % encoding.secret_exponent_to_wif(secret_exponent, compressed=False, is_test=args.t))
             else:
                 public_pair = parse_as_public_pair(c)
             if public_pair:
-                bitcoin_address_uncompressed = encoding.public_pair_to_bitcoin_address(public_pair, compressed=False)
-                bitcoin_address_compressed = encoding.public_pair_to_bitcoin_address(public_pair, compressed=True)
+                bitcoin_address_uncompressed = encoding.public_pair_to_bitcoin_address(public_pair, compressed=False, is_test=args.t)
+                bitcoin_address_compressed = encoding.public_pair_to_bitcoin_address(public_pair, compressed=True, is_test=args.t)
                 print('    "public_pair_x" : "%d",' % public_pair[0])
                 print('    "public_pair_y" : "%d",' % public_pair[1])
                 print('    "x_as_hex" : "%x",' % public_pair[0])
@@ -113,8 +114,10 @@ def main():
             if hash160_unc:
                 print('    "hash160_uncompressed" : "%s",' % b2h(hash160_unc))            
             if hash160_unc:
-                print('    "bitcoind_addr_uncompressed" : "%s",' % encoding.hash160_sec_to_bitcoin_address(hash160_unc))
-            print('    "bitcoin_addr" : "%s"' % encoding.hash160_sec_to_bitcoin_address(hash160))
+                #print('    "bitcoind_addr_uncompressed" : "%s",' % encoding.hash160_sec_to_bitcoin_address(hash160_unc))
+                print('    "bitcoind_addr_uncompressed" : "%s",' % bitcoin_address_uncompressed)
+            #print('    "bitcoin_addr" : "%s"' % encoding.hash160_sec_to_bitcoin_address(hash160))
+            print('    "bitcoin_addr" : "%s"' % bitcoin_address_compressed)
             if i == argcount:
                 print('  }')
             else:
