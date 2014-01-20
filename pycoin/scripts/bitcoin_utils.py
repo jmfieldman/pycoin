@@ -72,8 +72,20 @@ def main():
     parser.add_argument('-n', "--uncompressed", help='show in uncompressed form', action='store_true')
     parser.add_argument('-j', "--json", help='output in JSON format', action='store_true')
     parser.add_argument('-t', help='interpret fields as test values', action='store_true')
+    parser.add_argument('-ltc', help='generate LTC address', action='store_true')
+    parser.add_argument('-doge', help='generate LTC address', action='store_true')
     parser.add_argument('item', help='a WIF, secret exponent, X/Y public pair, SEC (as hex), hash160 (as hex), Bitcoin address', nargs="+")
     args = parser.parse_args()
+
+    if (args.ltc): 
+        args.t = "litecoin"
+    else:
+        if (args.doge):
+            if (args.t):
+                args.t = "dogetest"
+            else:
+                args.t = "doge"
+    
 
     if args.json:
         print("{")

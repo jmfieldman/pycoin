@@ -151,11 +151,18 @@ def is_hashed_base58_valid(base58):
 
 def private_byte_prefix(is_test):
     """WIF prefix. Returns b'\x80' for main network and b'\xef' for testnet"""
+    if (is_test == "litecoin"): return b'\xB0'
+    if (is_test == "doge"): return b'\x16'
+    if (is_test == "dogetest"): return b'\xC4'
     return b'\xef' if is_test else b'\x80'
 
 def public_byte_prefix(is_test):
     """Address prefix. Returns b'\0' for main network and b'\x6f' for testnet"""
+    if (is_test == "litecoin"): return b'\x30'
+    if (is_test == "doge"): return b'\x1E'
+    if (is_test == "dogetest"): return b'\x71'
     return b'\x6f' if is_test else b'\0'
+    
 
 def wif_to_tuple_of_secret_exponent_compressed(wif, is_test=False):
     """Convert a WIF string to the corresponding secret exponent. Private key manipulation.
