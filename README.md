@@ -1,3 +1,9 @@
+A NOTE FROM JMFIELDMAN
+======================
+
+Why did I fork this?  I was going through a bitcoin kick, and this was a really cool way to programmatically create bitcoin addresses.  I added support for JSON output (and sent it back to the original project).  I also added support for dogecoin.  I actually think dogecoin is silly, but I didn't know about bitcoin testnets back then and thought doge would be cheaper to test my programs with.
+
+
 pycoin -- Python Bitcoin Utilities
 ==================================
 
